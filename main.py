@@ -53,3 +53,31 @@ def hideData(img, secretMsg):
             if(dataIndex >= dataLen):
                 break
     return img
+
+def showData(img):
+    binData = ""
+    for vals in img:
+        for px in vals:
+            #Convert rgb vals into binary
+            r, g, b = decodeToBinary(px)
+
+            # Extracting data from the LSB's
+            binData += r[-1] 
+            binData += g[-1]
+            binData += b[-1]
+
+            # Split by 8-bits
+            allBytes = [binData[i: i+8] for i in range(0, len(binData),8)]
+
+            # Convert from bits to chars
+            decodedData = ""
+            for byte in allBytes:
+                decodedData += chr(int(byte,2))
+                if(decodedData[-5:] == "#####"): # Checks if we reached delimiter, which is #####
+                    break
+                #print(decodedData)
+            return decodedData[:-5] # Removes delimiter to show original hidden output
+
+
+
+
