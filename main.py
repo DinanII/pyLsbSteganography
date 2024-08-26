@@ -78,6 +78,21 @@ def showData(img):
                 #print(decodedData)
             return decodedData[:-5] # Removes delimiter to show original hidden output
 
+def encodeText():
+    imgName = input('Enter image name with extension')
+    img = cv2.imread(imgName) # Read the image input using openCV-Python
+    # Librart of Python bindings designed to solce coputer vision problems
+
+    print('Shape of the img: ',img.shape)
+    print('Resized varient of submitted img: ')
+    resizedImg = cv2.resize(img,(500,500))
+    cv2_imshow(resizedImg) # Display img
+
+    data = input('Enter data to be encoded...')
+    if(len(data) == 0):
+        pass
 
 
 
+
+#https://towardsdatascience.com/hiding-data-in-an-image-image-steganography-using-python-e491b68b1372
