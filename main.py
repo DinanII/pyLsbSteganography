@@ -1,7 +1,8 @@
+import sys
 import cv2
 import numpy as np
 import types
-from google.colab.patches import cv2_imshow 
+# from google.colab.patches import cv2.imshow('image',
 # For displaying images
 
 # Converts data into binary from different types
@@ -47,7 +48,7 @@ def hideData(img, secretMsg):
                 dataIndex += 1
             if(dataIndex < dataLen):
                 # Hide data into the LSB of blue pixel
-                px[2] = int(b[:-1] + binSecretMsg(dataIndex),2)
+                px[2] = int(b[:-1] + binSecretMsg[dataIndex], 2)
                 dataIndex += 1
             # Data encoded? Break out of the loop
             if(dataIndex >= dataLen):
@@ -58,7 +59,7 @@ def showData(img):
     binData = ""
     for vals in img:
         for px in vals:
-            #Convert rgb vals into binary
+            # Convert rgb vals into binary
             r, g, b = decodeToBinary(px)
 
             # Extracting data from the LSB's
@@ -66,17 +67,17 @@ def showData(img):
             binData += g[-1]
             binData += b[-1]
 
-            # Split by 8-bits
-            allBytes = [binData[i: i+8] for i in range(0, len(binData),8)]
+    # Split by 8-bits
+    allBytes = [binData[i: i+8] for i in range(0, len(binData), 8)]
 
-            # Convert from bits to chars
-            decodedData = ""
-            for byte in allBytes:
-                decodedData += chr(int(byte,2))
-                if(decodedData[-5:] == "#####"): # Checks if we reached delimiter, which is #####
-                    break
-                #print(decodedData)
-            return decodedData[:-5] # Removes delimiter to show original hidden output
+    # Convert from bits to chars
+    decodedData = ""
+    for byte in allBytes:
+        decodedData += chr(int(byte, 2))
+        if decodedData[-5:] == "#####":  # Checks if we reached delimiter, which is #####
+            break
+
+    return decodedData[:-5]  # Removes delimiter to show original hidden output
 
 def encodeText():
     imgName = input('Enter image name with extension')
@@ -85,14 +86,47 @@ def encodeText():
 
     print('Shape of the img: ',img.shape)
     print('Resized varient of submitted img: ')
-    resizedImg = cv2.resize(img,(500,500))
-    cv2_imshow(resizedImg) # Display img
+    # resizedImg = cv2.resize(img,(500,500))
+    # cv2.imshow('image',resizedImg)
+    #cv2.waitKey(0) # Display img
 
     data = input('Enter data to be encoded...')
     if(len(data) == 0):
-        pass
+        raise ValueError("Data is empty")
+
+    fileName = input("Enter the name of new encoded image with extension: ")
+    encodedImg = hideData(img, data) # Call to hideData to hide secret msg.
+
+    cv2.imwrite(fileName,encodedImg)
+
+def decodeText():
+    imgName = input("Enter the name of the steganographed img that you want to decode with extension: ")
+    img = cv2.imread(imgName)
+    # print('The steganographed image is as shown below: ')
+    # resizedImg = cv2.resize(img,(500,500)) # Rwsize
+    # cv2.imshow('image',resizedImg)
+    # cv2.waitKey(0) # Display img
+
+    txt = showData(img)
+    print(txt)
+    return txt
 
 
+def steganography():
+    print("========================================")
+    print("Image Steganography")
+    print("========================================")
+    print("0. Quit program")
+    print("1. Encode data")
+    print("2. Decode data into image")
+    uChoice = input("Enter a choice: ")
+    match uChoice:
+        case "0":
+            return
+        case "1":
+            encodeText()
+        case "2":
+            decodeText()
 
-
+steganography()
 #https://towardsdatascience.com/hiding-data-in-an-image-image-steganography-using-python-e491b68b1372
