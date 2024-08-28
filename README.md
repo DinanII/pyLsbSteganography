@@ -1,7 +1,8 @@
 # Demo Steganography script written in Python
 
 ## Steganography
-"Steganography is the process of hiding a secret message within a larger one in such a way that someone can not know the presence or contents of the hidden message."
+> "Steganography is the process of hiding a secret message within a larger one in such a way that someone can not know the presence or contents of the hidden message."
+-- [TowardsDataSience.com](https://towardsdatascience.com/hiding-data-in-an-image-image-steganography-using-python-e491b68b1372)
 
 ## Brief setup summary
 

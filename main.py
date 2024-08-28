@@ -3,6 +3,11 @@ import cv2
 import numpy as np
 import types
 
+# ===========================
+#
+#   Helper Functions
+#
+# ===========================
 def askForString(msg):
     isValid = False
     uInput = ''
@@ -12,7 +17,23 @@ def askForString(msg):
         if(uInput != ''):
             return uInput
 
-# Converts data into binary from different types
+# Requires actual img from cv2.imread
+def showImg(img):
+    resizedImg = cv2.resize(img,(500,500))
+    cv2.imshow('image',resizedImg)
+    cv2.waitKey(0)
+
+# Waits until the user submit the input
+def waitForUsr(msg = "Press <Enter> to proceed.>"):
+    print(msg)
+    input()
+
+
+# ===========================
+#
+#   Code & Decoding
+#
+# ===========================
 def decodeToBinary(msg):
     if (type(msg) == str):
         return ''.join([format(ord(i),"08b") for i in msg])
@@ -22,23 +43,25 @@ def decodeToBinary(msg):
         return format(msg,"08b")
     else:
         raise TypeError("The submitted input type is not supported.")
-    
+
+
 # Hides the secret message into the image
 def hideData(img, secretMsg):
     # Calculating the maximum bytes to encode into binary
     nBytes = img.shape[0] * img.shape[1] * 3 // 8
     
-    # Checks if the number of bytes to encode is less than
-    # maximum bytes in the img
+    # Checks if the secretMsg is larger than the image size and raises a error if so.
     if(len(secretMsg) > nBytes):
         raise ValueError('Image has insufficient bytes. Minify your data or submit a bigger image')
     
-    secretMsg += "#####" # Can use any string ad delimiter
+    secretMsg += "#####"
 
+    # Initialization for hiding msg into binary
     dataIndex = 0
     binSecretMsg  = decodeToBinary(secretMsg)
     dataLen = len(binSecretMsg)
 
+ # This loop hides the message in the image by altering the LSB's
     for vals in img:
         for px in vals:
             # Convert RGB vals to binary format
@@ -87,6 +110,7 @@ def showData(img):
     return decodedData[:-5]  # Removes delimiter to show original hidden output
 
 
+# Asks for input and encodes the img
 def encodeText():
     imgName = askForString('Enter image name inputwith extension')
     img = cv2.imread(imgName) # Read the image input using openCV-Python
@@ -94,9 +118,7 @@ def encodeText():
 
     print('Shape of the img: ',img.shape)
     print('Resized varient of submitted img: ')
-    # resizedImg = cv2.resize(img,(500,500))
-    # cv2.imshow('image',resizedImg)
-    #cv2.waitKey(0) # Display img
+
 
     data = input('Enter data to be encoded...')
     if(len(data) == 0):
@@ -107,18 +129,13 @@ def encodeText():
 
     cv2.imwrite(fileName,encodedImg)
 
+
 def decodeText():
     imgName = askForString("Enter the name of the steganographed img that you want to decode with extension: ")
     img = cv2.imread(imgName)
-    # print('The steganographed image is as shown below: ')
-    # resizedImg = cv2.resize(img,(500,500)) # Rwsize
-    # cv2.imshow('image',resizedImg)
-    # cv2.waitKey(0) # Display img
-
     txt = showData(img)
     print(txt)
-    return txt
-
+    waitForUsr()
 
 def steganography():
     print("========================================")
@@ -138,4 +155,4 @@ def steganography():
     steganography()
 
 steganography()
-#https://towardsdatascience.com/hiding-data-in-an-image-image-steganography-using-python-e491b68b1372
+#
