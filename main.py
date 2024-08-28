@@ -2,8 +2,15 @@ import sys
 import cv2
 import numpy as np
 import types
-# from google.colab.patches import cv2.imshow('image',
-# For displaying images
+
+def askForString(msg):
+    isValid = False
+    uInput = ''
+    while(not isValid):
+        print(msg)
+        uInput = input()
+        if(uInput != ''):
+            return uInput
 
 # Converts data into binary from different types
 def decodeToBinary(msg):
@@ -79,8 +86,9 @@ def showData(img):
 
     return decodedData[:-5]  # Removes delimiter to show original hidden output
 
+
 def encodeText():
-    imgName = input('Enter image name with extension')
+    imgName = askForString('Enter image name inputwith extension')
     img = cv2.imread(imgName) # Read the image input using openCV-Python
     # Librart of Python bindings designed to solce coputer vision problems
 
@@ -94,13 +102,13 @@ def encodeText():
     if(len(data) == 0):
         raise ValueError("Data is empty")
 
-    fileName = input("Enter the name of new encoded image with extension: ")
+    fileName = askForString("Enter the name of new encoded image with extension: ")
     encodedImg = hideData(img, data) # Call to hideData to hide secret msg.
 
     cv2.imwrite(fileName,encodedImg)
 
 def decodeText():
-    imgName = input("Enter the name of the steganographed img that you want to decode with extension: ")
+    imgName = askForString("Enter the name of the steganographed img that you want to decode with extension: ")
     img = cv2.imread(imgName)
     # print('The steganographed image is as shown below: ')
     # resizedImg = cv2.resize(img,(500,500)) # Rwsize
@@ -119,7 +127,7 @@ def steganography():
     print("0. Quit program")
     print("1. Encode data")
     print("2. Decode data into image")
-    uChoice = input("Enter a choice: ")
+    uChoice = askForString("Enter a choice: ")
     match uChoice:
         case "0":
             return
@@ -127,6 +135,7 @@ def steganography():
             encodeText()
         case "2":
             decodeText()
+    steganography()
 
 steganography()
 #https://towardsdatascience.com/hiding-data-in-an-image-image-steganography-using-python-e491b68b1372
