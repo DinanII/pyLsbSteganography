@@ -2,7 +2,8 @@ import sys
 import cv2
 import numpy as np
 import types
-
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 # ===========================
 #
 #   Helper Functions
@@ -137,6 +138,11 @@ def decodeText():
     print(txt)
     waitForUsr()
 
+def filePickerTest():
+    Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+    print(filename)
+
 def steganography():
     print("========================================")
     print("Image Steganography")
@@ -149,6 +155,7 @@ def steganography():
     print("0. Quit program")
     print("1. Encode data into image")
     print("2. Decode data from image")
+    print("3. Filepicker test")
     uChoice = askForString("Enter a choice: ")
     match uChoice:
         case "0":
@@ -157,6 +164,8 @@ def steganography():
             encodeText()
         case "2":
             decodeText()
+        case "3":
+            filePickerTest()
     steganography()
 
 steganography()
