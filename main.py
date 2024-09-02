@@ -142,8 +142,8 @@ def steganography():
     print("Image Steganography")
     print("========================================")
     print("0. Quit program")
-    print("1. Encode data")
-    print("2. Decode data into image")
+    print("1. Encode data into image")
+    print("2. Decode data from image")
     uChoice = askForString("Enter a choice: ")
     match uChoice:
         case "0":
