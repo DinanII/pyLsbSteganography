@@ -43,8 +43,6 @@ ENV/
 env.bak/
 venv.bak/
 
-# Virtual environment
-stegano/  # Add this line to ignore your virtual environment directory if named 'stegano'
 
 # Jupyter Notebook
 .ipynb_checkpoints
