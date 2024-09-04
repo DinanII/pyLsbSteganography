@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import types
 from tkinter import Tk
-from tkinter.filedialog import askopenfilename
+from tkinter import filedialog
 # ===========================
 #
 #   Helper Functions
@@ -111,37 +111,51 @@ def showData(img):
     return decodedData[:-5]  # Removes delimiter to show original hidden output
 
 
-# Asks for input and encodes the img
+# ===========================
+#
+#   Input & Output
+#
+# ===========================
 def encodeText():
-    imgName = askForString('Enter image name inputwith extension')
+    imgName = openFilePicker(dialogTitle = "Choose image to hide data in.") #askForString('Enter image name inputwith extension')
+    if(not imgName):
+        steganography()
+        return
     img = cv2.imread(imgName) # Read the image input using openCV-Python
     # Librart of Python bindings designed to solce coputer vision problems
 
-    print('Shape of the img: ',img.shape)
-    print('Resized varient of submitted img: ')
+    # print('Shape of the img: ',img.shape)
+    # print('Resized varient of submitted img: ')
 
 
-    data = input('Enter data to be encoded...')
+    data = askForString("Enter data that should be encoded / hidden into the img: ")
     if(len(data) == 0):
         raise ValueError("Data is empty")
 
-    fileName = askForString("Enter the name of new encoded image with extension: ")
+    #fileName = askForString("Enter the name of new encoded image with extension: ")
+    Tk().withdraw()
+    path = filedialog.asksaveasfilename(title = "Enter filename to save encoded img", defaultextension=".png", filetypes=[("PNG file", "*.png")])
     encodedImg = hideData(img, data) # Call to hideData to hide secret msg.
-
-    cv2.imwrite(fileName,encodedImg)
+    cv2.imwrite(path,encodedImg)
 
 
 def decodeText():
-    imgName = askForString("Enter the name of the steganographed img that you want to decode with extension: ")
+    imgName = openFilePicker(dialogTitle = "Choose steganographed image to decode ") #askForString("Enter the name of the steganographed img that you want to decode with extension: ")
+    if(not imgName):
+        steganography()
+        return
     img = cv2.imread(imgName)
     txt = showData(img)
     print(txt)
     waitForUsr()
 
-def filePickerTest():
-    Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
-    filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
-    print(filename)
+def openFilePicker(fileTypes=[('Image Files', '*.png')],dialogTitle="Choose a file"):
+    Tk().withdraw() 
+    filePath = filedialog.askopenfilename(filetypes = fileTypes,title=dialogTitle)
+    if(filePath):
+        isValid = True
+        print("FilePath: "+filePath)
+        return filePath
 
 def steganography():
     print("========================================")
@@ -165,7 +179,7 @@ def steganography():
         case "2":
             decodeText()
         case "3":
-            filePickerTest()
+            openFilePicker()
     steganography()
 
 steganography()

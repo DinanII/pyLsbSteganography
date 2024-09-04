@@ -5,8 +5,9 @@
 -- [TowardsDataSience.com](https://towardsdatascience.com/hiding-data-in-an-image-image-steganography-using-python-e491b68b1372)
 
 ## Brief setup summary
-1. Initiate virtual enviroment with: `python3 -m venv .env` or `python -m venv .env` (for Windows). 
+1. Initiate a virtual enviroment with: `python3 -m venv .env` or `python -m venv .env` (for Windows). 
 This will initiate a new virtual enviroment locally. Please use the interpeter included in the virtual enviroment (.env/bin/python).
+However, the tkinter is also required globally. Install it with `pip install tkinter`.
 2. Activate virtual enviroment
     - **Windows**
         - CMD: `.env/Scripts/activate.bat`.
