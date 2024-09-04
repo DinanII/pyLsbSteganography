@@ -7,7 +7,6 @@
 ## Brief setup summary
 1. Initiate a virtual enviroment with: `python3 -m venv .env` or `python -m venv .env` (for Windows). 
 This will initiate a new virtual enviroment locally. Please use the interpeter included in the virtual enviroment (.env/bin/python).
-However, the tkinter is also required globally. Install it with `pip install tkinter`.
 2. Activate virtual enviroment
     - **Windows**
         - CMD: `.env/Scripts/activate.bat`.
@@ -22,5 +21,6 @@ However, the tkinter is also required globally. Install it with `pip install tki
 This will install all packages listed in __{project_root}/requirements.txt__.
 4. If a new dependency is installed, run `pip freeze > requirements.txt` so every package (including new ones) is registered, so others
 can also easily install.
-5. The Python Tkinter module is required for the file dialogs. Cannot be installed via pip. But can be installed globally with:
+5. The Python Tkinter module is required for the file dialogs. Cannot be installed in local enviroment via pip. But can be installed globally with:
     - Ubuntu: `sudo apt-get install python3-tk`.
+    - Windows: `pip install tk`
