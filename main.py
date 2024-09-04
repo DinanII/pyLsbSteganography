@@ -19,7 +19,7 @@ def askForString(msg,isDialogue = False):
             uInput = input()
         else:
             Tk().withdraw()
-            uInput = simpledialog.askstring("Input",msg)
+            uInput = simpledialog.askstring("Input",msg+"")
         if(uInput != ''):
             return uInput
 
@@ -65,7 +65,9 @@ def hideData(img, secretMsg):
     # Initialization for hiding msg into binary
     dataIndex = 0
     binSecretMsg  = decodeToBinary(secretMsg)
+
     dataLen = len(binSecretMsg)
+    #dataLenBin = decodeToBinary(dataLen)
 
  # This loop hides the message in the image by altering the LSB's
     for vals in img:
@@ -93,27 +95,55 @@ def hideData(img, secretMsg):
 
 def showData(img):
     binData = ""
+    decodedData = ""
+
     for vals in img:
         for px in vals:
-            # Convert rgb vals into binary
+            # Convert RGB values to binary
             r, g, b = decodeToBinary(px)
 
             # Extracting data from the LSB's
-            binData += r[-1] 
+            binData += r[-1]
             binData += g[-1]
             binData += b[-1]
 
-    # Split by 8-bits
-    allBytes = [binData[i: i+8] for i in range(0, len(binData), 8)]
+            # Every 8 bits, convert to a character
+            if len(binData) >= 8:
+                byte = binData[:8] # Takes first 8 characters (bits) from binData
+                binData = binData[8:] # Takes the first 8 bits and removes them, so there's room for the next iteration
+                decodedData += chr(int(byte, 2)) # Converts the byte to int, and converting in to char and append it to decodedData.
+                # 2 (second arg) specifies the input: base2, which represents binary.
 
-    # Convert from bits to chars
-    decodedData = ""
-    for byte in allBytes:
-        decodedData += chr(int(byte, 2))
-        if decodedData[-5:] == "#####":  # Checks if we reached delimiter, which is #####
-            break
+                # Check for the delimiter
+                if decodedData[-5:] == "#####":
+                    return decodedData[:-5]  # Return without the delimiter
 
-    return decodedData[:-5]  # Removes delimiter to show original hidden output
+    return decodedData
+# Original method
+# First converted image to binary and converted the binary to characters. Problematic since it converts the WHOLE images to binary first.
+# def showData(img):
+#     binData = ""
+#     for vals in img:
+#         for px in vals:
+#             # Convert rgb vals into binary
+#             r, g, b = decodeToBinary(px)
+
+#             # Extracting data from the LSB's
+#             binData += r[-1] 
+#             binData += g[-1]
+#             binData += b[-1]
+
+#     # Split by 8-bits
+#     allBytes = [binData[i: i+8] for i in range(0, len(binData), 8)]
+
+#     # Convert from bits to chars
+#     decodedData = ""
+#     for byte in allBytes:
+#         decodedData += chr(int(byte, 2))
+#         if decodedData[-5:] == "#####":  # Checks if we reached delimiter, which is #####
+#             break
+
+#     return decodedData[:-5]  # Removes delimiter to show original hidden output
 
 
 # ===========================
@@ -128,6 +158,8 @@ def encodeText():
         return
     img = cv2.imread(imgName) # Read the image input using openCV-Python
     # Librart of Python bindings designed to solce coputer vision problems
+
+
 
     # print('Shape of the img: ',img.shape)
     # print('Resized varient of submitted img: ')
@@ -163,9 +195,20 @@ def openFilePicker(fileTypes=[('Image Files', '*.png')],dialogTitle="Choose a fi
         return filePath
 
 def dialogueTest():
-    Tk().withdraw()
-    uInput = simpledialog.askstring("Title","Prompt")
-    print(uInput)
+    # Create a simple hidden root window
+    root = Tk()
+    root.withdraw()  # Hide the root window
+
+    # Customize the askstring dialog
+    user_input = simpledialog.askstring(
+        title="Title input digjrdin",
+        prompt="Lorem ipsum dolor sit amet. kfiesngeipogjaspoghueirphiouera",
+        parent=root
+    )
+
+    root.destroy()  # Destroy the root window after input
+
+    return user_input
     
 
 def steganography():
@@ -175,7 +218,7 @@ def steganography():
     print()
     print("Hide or retrieve a hidden message from an image.")
     print("Please note en- and decoding can take a while.")
-    print("Choose one of the following options to proceed")
+    print("Choose one of the following options to proc0eed")
     print()
     print("0. Quit program")
     print("1. Encode data into image")
