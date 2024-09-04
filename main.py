@@ -4,17 +4,22 @@ import numpy as np
 import types
 from tkinter import Tk
 from tkinter import filedialog
+from tkinter import simpledialog
 # ===========================
 #
 #   Helper Functions
 #
 # ===========================
-def askForString(msg):
+def askForString(msg,isDialogue = False):
     isValid = False
     uInput = ''
     while(not isValid):
-        print(msg)
-        uInput = input()
+        if (not isDialogue):
+            print(msg)
+            uInput = input()
+        else:
+            Tk().withdraw()
+            uInput = simpledialog.askstring("Input",msg)
         if(uInput != ''):
             return uInput
 
@@ -128,7 +133,7 @@ def encodeText():
     # print('Resized varient of submitted img: ')
 
 
-    data = askForString("Enter data that should be encoded / hidden into the img: ")
+    data = askForString("Enter data that should be encoded / hidden into the img: ",True)
     if(len(data) == 0):
         raise ValueError("Data is empty")
 
@@ -157,6 +162,12 @@ def openFilePicker(fileTypes=[('Image Files', '*.png')],dialogTitle="Choose a fi
         print("FilePath: "+filePath)
         return filePath
 
+def dialogueTest():
+    Tk().withdraw()
+    uInput = simpledialog.askstring("Title","Prompt")
+    print(uInput)
+    
+
 def steganography():
     print("========================================")
     print("Image Steganography")
@@ -169,7 +180,7 @@ def steganography():
     print("0. Quit program")
     print("1. Encode data into image")
     print("2. Decode data from image")
-    print("3. Filepicker test")
+    print("3. input dialogue test")
     uChoice = askForString("Enter a choice: ")
     match uChoice:
         case "0":
@@ -179,7 +190,7 @@ def steganography():
         case "2":
             decodeText()
         case "3":
-            openFilePicker()
+            dialogueTest()
     steganography()
 
 steganography()
