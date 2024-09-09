@@ -40,6 +40,8 @@ def waitForUsr(msg = "Press <Enter> to proceed.>"):
 #   Code & Decoding
 #
 # ===========================
+
+# Decodes given msg to binary
 def decodeToBinary(msg):
     if (type(msg) == str):
         return ''.join([format(ord(i),"08b") for i in msg])
@@ -58,7 +60,8 @@ def hideData(img, secretMsg):
     
     # Checks if the secretMsg is larger than the image size and raises a error if so.
     if(len(secretMsg) > nBytes):
-        raise ValueError('Image has insufficient bytes. Minify your data or submit a bigger image')
+        raise ValueError('Image has insufficient bytes. Minify your data or submit a bigger image. Data not encoded')
+        return
     
     secretMsg += "#####"
 
@@ -69,7 +72,7 @@ def hideData(img, secretMsg):
     dataLen = len(binSecretMsg)
     #dataLenBin = decodeToBinary(dataLen)
 
- # This loop hides the message in the image by altering the LSB's
+    # This loop hides the message in the image by altering the LSB's
     for vals in img:
         for px in vals:
             # Convert RGB vals to binary format
@@ -93,6 +96,7 @@ def hideData(img, secretMsg):
                 break
     return img
 
+# Decodes hidden msg from img LSB's
 def showData(img):
     binData = ""
     decodedData = ""
