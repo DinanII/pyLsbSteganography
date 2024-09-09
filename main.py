@@ -155,31 +155,33 @@ def showData(img):
 #   Input & Output
 #
 # ===========================
+
+# Encodes text into image (with the help of other methods).
 def encodeText():
     imgName = openFilePicker(dialogTitle = "Choose image to hide data in.") #askForString('Enter image name inputwith extension')
-    if(not imgName):
+    if(not imgName or imgName == '' or imgName == None):
+        print("No file chosen.")
         steganography()
         return
     img = cv2.imread(imgName) # Read the image input using openCV-Python
-    # Librart of Python bindings designed to solce coputer vision problems
-
-
-
-    # print('Shape of the img: ',img.shape)
-    # print('Resized varient of submitted img: ')
 
 
     data = askForString("Enter data that should be encoded / hidden into the img: ",True)
     if(len(data) == 0):
         raise ValueError("Data is empty")
 
-    #fileName = askForString("Enter the name of new encoded image with extension: ")
     Tk().withdraw()
     path = filedialog.asksaveasfilename(title = "Enter filename to save encoded img", defaultextension=".png", filetypes=[("PNG file", "*.png")])
     encodedImg = hideData(img, data) # Call to hideData to hide secret msg.
-    cv2.imwrite(path,encodedImg)
+    print(f"New img.  path: {path}")
+    try:
+        cv2.imwrite(path,encodedImg)
+    except cv2.error as e:
+        print(f"An CV 2 error occured, probably due to no img or path being submitted: {e}")
+        steganography()
+        return
 
-
+# Decodes text from img
 def decodeText():
     imgName = openFilePicker(dialogTitle = "Choose steganographed image to decode ") #askForString("Enter the name of the steganographed img that you want to decode with extension: ")
     if(not imgName):
@@ -189,6 +191,7 @@ def decodeText():
     txt = showData(img)
     print(txt)
     waitForUsr()
+
 
 def openFilePicker(fileTypes=[('Image Files', '*.png')],dialogTitle="Choose a file"):
     Tk().withdraw() 
