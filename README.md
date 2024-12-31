@@ -21,6 +21,6 @@ This will initiate a new virtual enviroment locally. Please use the interpeter i
 This will install all packages listed in __{project_root}/requirements.txt__.
 4. If a new dependency is installed, run `pip freeze > requirements.txt` so every package (including new ones) is registered, so others
 can also easily install.
-5. The Python Tkinter module is required for the file dialogs. Cannot be installed in local enviroment via pip. But can be installed globally with:
+5. If problems are encountered, you may need to install the Python3 Tkinter module (for the dialogs). Cannot be installed in local enviroment via pip. But can be installed globally with:
     - Ubuntu: `sudo apt-get install python3-tk`.
     - Windows: `pip install tk`
